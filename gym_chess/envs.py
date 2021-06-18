@@ -127,10 +127,10 @@ class Chess(gym.Env):
         board = self._board if self._board else chess.Board()
 
         if mode == 'unicode':
-            return board.unicode()
+            return print(board.unicode())
         
         else:
-            return super(Chess, self).render(mode=mode)
+            return print(board)
 
 
     @property
