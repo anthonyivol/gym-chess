@@ -93,15 +93,17 @@ class Chess(gym.Env):
     def step(self, action: chess.Move) -> Tuple[chess.Board, float, bool, None]:
 
         assert self._ready, "Cannot call env.step() before calling reset()"
-        
-        is_legal_move = action in self._board.legal_moves
 
-        if is_legal_move:
-            self._board.push(action)
-            
+        if action not in self._board.legal_moves:
+            raise ValueError(
+                f"Illegal move {action} for board position {self._board.fen()}"
+            )
+
+        self._board.push(action)
+
         observation = self._observation()
-        reward = self._reward(is_legal_move)
-        done = self._board.is_game_over() if is_legal_move else True
+        reward = self._reward()
+        done = self._board.is_game_over()
 
         if done:
             self._ready = False
@@ -147,12 +149,11 @@ class Chess(gym.Env):
         return self._board.copy()
 
 
-    def _reward(self, is_legal_move) -> float:
+    def _reward(self) -> float:
         """Returns the reward for the most recent move."""
-        if not is_legal_move :
-            return -0.1
         result = self._board.result()
         reward = Chess._rewards[result]
+
         return reward
 
     
