@@ -140,7 +140,10 @@ class Chess(gym.Env):
 
         return list(self._board.legal_moves)
     
-
+    @property
+    def board(self):
+        return self._board
+    
     def _observation(self) -> chess.Board:
         """Returns the current board position."""
         return self._board.copy()
