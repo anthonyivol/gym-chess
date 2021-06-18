@@ -98,10 +98,10 @@ class Chess(gym.Env):
 
         if is_legal_move:
             self._board.push(action)
-        
+            
         observation = self._observation()
         reward = self._reward(is_legal_move)
-        done = self._board.is_game_over()
+        done = self._board.is_game_over() if is_legal_move else True
 
         if done:
             self._ready = False
